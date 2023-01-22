@@ -42,8 +42,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
         # TODO: добавьте требуемую валидацию
         open_ads = Advertisement.objects.filter(creator=self.context["request"].user)
-        print(open_ads)
-        if len(open_ads) > 9:
-            raise serializers.ValidationError('Too much open advertisements')
-
+        status_list = [ad.status for ad in open_ads]
+        if status_list.count('OPEN') > 9:
+            data['status'] = 'CLOSE'
         return data
